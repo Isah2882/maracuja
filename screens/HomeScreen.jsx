@@ -8,7 +8,7 @@ import { useTasks } from '../contexts/TaskContext';
 
 export default function HomeScreen({ navigation }) {
   const { localTasks, toggleTaskCompletion, deleteTask, clearTasks, getCompletedCount, 
-    theme, toggleTheme, exportTasks, restoreTasks } = useTasks();
+    theme} = useTasks();
   const [apiTasks, setApiTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -37,27 +37,8 @@ export default function HomeScreen({ navigation }) {
     if (filter === 'completed') return task.completed;
     return true;
   });
-  const handleExport = async () => {
-    try {
-      const message = await exportTasks();
-      setSuccessMessage(message);
-      setTimeout(() => setSuccessMessage(''), 2000);
-    } catch (err) {
-      setSuccessMessage('');
-      alert(err.message);
-    }
-  };
 
-  const handleRestore = async () => {
-    try {
-      const message = await restoreTasks();
-      setSuccessMessage(message);
-      setTimeout(() => setSuccessMessage(''), 2000);
-    } catch (err) {
-      setSuccessMessage('');
-      alert(err.message);
-    }
-  };
+
   const renderItem = ({ item }) => {
     const isLocal = typeof item.id === 'string'
     return(
@@ -81,7 +62,6 @@ export default function HomeScreen({ navigation }) {
         Tarefas: {filteredTasks.length} | Concluídas: {getCompletedCount()}
       </Text>
       {successMessage ? <Text style={styles.successText}>{successMessage}</Text> : null}
-      <CustomButton title="Alterar Tema" onPress={() => toggleTheme()} color="#6c757d" />
       <View style={styles.filterContainer}>
         <CustomButton
           title="Todas"
@@ -172,16 +152,7 @@ export default function HomeScreen({ navigation }) {
           setTimeout(() => setSuccessMessage(''), 2000);
         }}
       />
-      <CustomModal
-        visible={clearModalVisible}
-        onClose={() => setClearModalVisible(false)}
-        title="Limpar Tarefas"
-        message="Deseja excluir todas as tarefas locais?"
-        onConfirm={() => {
-          clearTasks();
-          setClearModalVisible(false);
-        }}
-      />
+
     </View>
   );
 }
