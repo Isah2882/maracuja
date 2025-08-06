@@ -124,19 +124,9 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate('AddTask')}
         color="#28a745"
       />
-      <CustomButton
-        title="Limpar Tarefas"
-        onPress={() => setClearModalVisible(true)}
-        color="#dc3545"
-      />
        <CustomButton
         title="Exportar Tarefas"
         onPress={handleExport}
-        color="#17a2b8"
-      />
-      <CustomButton
-        title="Restaurar Backup"
-        onPress={handleRestore}
         color="#17a2b8"
       />
       <CustomModal
