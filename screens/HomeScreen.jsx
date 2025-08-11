@@ -5,9 +5,10 @@ import TaskCard from '../components/TaskCard';
 import CustomButton from '../components/CustomButton';
 import CustomModal from '../components/CustomModal';
 import { useTasks } from '../contexts/TaskContext';
+import {handleExport} from '../screens/SettingsScreen'
 
 export default function HomeScreen({ navigation }) {
-  const { localTasks, toggleTaskCompletion, deleteTask, clearTasks, getCompletedCount, 
+  const { localTasks, toggleTaskCompletion, deleteTask, getCompletedCount, 
     theme} = useTasks();
   const [apiTasks, setApiTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -124,11 +125,7 @@ export default function HomeScreen({ navigation }) {
         onPress={() => navigation.navigate('AddTask')}
         color="#28a745"
       />
-       <CustomButton
-        title="Exportar Tarefas"
-        onPress={handleExport}
-        color="#17a2b8"
-      />
+    
       <CustomModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}

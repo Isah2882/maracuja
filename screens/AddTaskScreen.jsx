@@ -4,32 +4,60 @@ import axios from 'axios';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { useTasks } from '../contexts/TaskContext';
+import { Formik } from 'formik';
+import * as Yup from 'yup'
+import { Picker } from '@react-native-picker/picker';
 
-export default function AddTaskScreen({ navigation, route }) {
-  const { addTask } = useTasks();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+const validationSchema=Yup.object().shape({
+  title: Yup.string()
+  .max(50, 'O título deve ter no máximo 50 caracteres')
+  .required('O título é obrigatório'),
+  description: Yuo.string().max(200, 'A descrição deve ter no máximo 200 caracteres'),
+  priority: Yup.string().required('Selecione uma prioridade'),
+});
 
-  const handleSubmit = async () => {
-    if (title.trim()) {
+export default function AddTaskScreen({ navigation }) {
+  const { addTask,theme } = useTasks();
+  const [acceptTerms, setAcceptTerms] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const handleSubmit = async (values, {resetForm}) => {
+    if (acceptTerms) {
+      Alert.alert('Erro', 'Você deve aceitar os termos para adicionar uma tarefa.');
+      return;
+    }
       try {
         const response = await axios.post('https://jsonplaceholder.typicode.com/todos', {
-          title,
+          title: values.title,
           completed: false,
         });
-        addTask({ title, description });
+        addTask({ 
+          title: values.title,
+          description: values.description,
+          priority:values.priority, });
+          setSuccessMessage('Tarefas adicionada com sucesso');
+          setTimeout(()=>{
+            setSuccessMessage(''); /*You, 1 second ago uncomitted changes*/
+            resetForm();
+            setAcceptTerms(false);
         navigation.goBack();
+      }, 1000);
       } catch (err) {
         Alert.alert('Erro', 'Falha ao salvar na API');
       }
-    } else {
-      Alert.alert('Erro', 'Por favor, insira o título da tarefa.');
-    }
-  };
+    };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Nova Tarefa</Text>
+    <View style={[styles.container, theme==='dark' && styles.darkContainer]}>
+     <Text style={[StyleSheet.container, theme==='dark' && styles.darkText]}>Nova tarefa</Text>
+      {successMessage? <Text style={styles.successText}>{successMessage}</Text>: null}
+      <Formik 
+      initialValues={{title:'', description:'',priority:'baixa'}}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      >
+        {({})}
+      </Formik>
       <CustomInput
         value={title}
         onChangeText={(text) => setTitle(text.slice(0, 50))}

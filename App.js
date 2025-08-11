@@ -8,10 +8,11 @@ import DetailsScreen from './screens/DetailsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SettingScreen from './screens/SettingsScreen';
 import { TaskProvider } from './contexts/TaskContext';
+import Icon  from 'react-native-vector-icons/MaterialIcons';
 
 const Stack = createStackNavigator();
-const Tab= createBottomTabNavigator
-const Drawer=createDrawerNavigator
+const Tab= createBottomTabNavigator()
+const Drawer= createDrawerNavigator()
 
 function HomeStack(){
   return(
@@ -58,7 +59,7 @@ function TabNavigator(){
       tabBarInativeTinColor:'#666',
       tabBarStyle:{backgroundColor:'#f5f5f5'},
     })}>
-      <Tab.Screen name="Tarefas" component={HomeScreen} options={{headerShown: false}}/>
+      <Tab.Screen name="Tarefas" component={HomeStack} options={{headerShown: false}}/>
       <Tab.Screen name="Perfil" component={ProfileScreen}/>
       <Tab.Screen name="Configurações" component={SettingScreen}/>
     </Tab.Navigator>
@@ -110,31 +111,7 @@ export default function App() {
   return (
     <TaskProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AddTask"
-            component={AddTaskScreen}
-            options={{
-              title: 'Adicionar Tarefa',
-              headerStyle: { backgroundColor: '#28a745' },
-              headerTintColor: '#fff',
-            }}
-          />
-          <Stack.Screen
-            name="Details"
-            component={DetailsScreen}
-            options={{
-              title: 'Detalhes da Tarefa',
-              headerStyle: { backgroundColor: '#dc3545' },
-              headerTintColor: '#fff',
-            }}
-          />
-        </Stack.Navigator>
+        <DrawerNavigator/>
       </NavigationContainer>
     </TaskProvider>
   );
